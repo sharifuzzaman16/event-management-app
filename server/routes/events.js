@@ -137,6 +137,71 @@ router.patch('/join/:id', verifyJWT, async (req, res) => {
 });
 
 
+ // Filter events based on search and date range
+router.get('/', async (req, res) => {
+  const db = getDb();
+  const { search, filter } = req.query;
+
+  const query = {};
+
+  if (search) {
+    query.title = { $regex: search, $options: 'i' };
+  }
+
+  if (filter) {
+    const today = new Date();
+    let start = new Date();
+    let end = new Date();
+
+    switch (filter) {
+      case 'current-week': {
+        const day = today.getDay();
+        const diffToMonday = day === 0 ? -6 : 1 - day;
+        start.setDate(today.getDate() + diffToMonday);
+        end = new Date(start);
+        end.setDate(start.getDate() + 6);
+        break;
+      }
+
+      case 'last-week': {
+        const day = today.getDay();
+        const diffToLastMonday = day === 0 ? -13 : -6 - day;
+        start.setDate(today.getDate() + diffToLastMonday);
+        end = new Date(start);
+        end.setDate(start.getDate() + 6);
+        break;
+      }
+
+      case 'current-month': {
+        start = new Date(today.getFullYear(), today.getMonth(), 1);
+        end = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        break;
+      }
+
+      case 'last-month': {
+        start = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+        end = new Date(today.getFullYear(), today.getMonth(), 0);
+        break;
+      }
+
+      default:
+        break;
+    }
+
+    query.date = {
+      $gte: start.toISOString().split('T')[0],
+      $lte: end.toISOString().split('T')[0],
+    };
+  }
+
+  try {
+    const events = await db.collection('events').find(query).toArray();
+    res.send(events);
+  } catch (error) {
+    console.error('Error filtering events:', error);
+    res.status(500).send({ message: 'Failed to fetch events' });
+  }
+});
 
 
 module.exports = router;

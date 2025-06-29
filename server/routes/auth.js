@@ -32,9 +32,30 @@ router.post('/register', async (req, res) => {
       createdAt: new Date(),
     };
 
-    await users.insertOne(newUser);
+    const result = await users.insertOne(newUser);
+    const insertedUser = {
+      _id: result.insertedId,
+      ...newUser
+    };
 
-    res.status(201).json({ message: 'User registered successfully!' });
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: insertedUser._id, email: insertedUser.email, name: insertedUser.name },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
+    );
+
+    res.status(201).json({
+      message: 'User registered successfully!',
+      token,
+      user: {
+        _id: insertedUser._id,
+        name: insertedUser.name,
+        email: insertedUser.email,
+        photoURL: insertedUser.photoURL
+      }
+    });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error during registration.' });
@@ -72,6 +93,7 @@ router.post('/login', async (req, res) => {
     res.json({
       token,
       user: {
+        _id: user._id,
         name: user.name,
         email: user.email,
         photoURL: user.photoURL,

@@ -79,24 +79,44 @@ router.delete('/:id', verifyJWT, async (req, res) => {
 });
 
 // Update an event by ID (only creator)
-router.put('/events/:id', verifyJWT, async (req, res) => {
+const { ObjectId } = require("mongodb");
+
+router.put('/:id', verifyJWT, async (req, res) => {
+  const db = getDb();
+  const eventId = req.params.id;
+  const userEmail = req.user.email;
+  const updatedEvent = req.body;
+
+  if (!updatedEvent.title || !updatedEvent.date || !updatedEvent.description) {
+    return res.status(400).send({ message: 'Missing required fields' });
+  }
+
   try {
-    const eventId = req.params.id;
-    const updates = req.body;
-    const updatedEvent = await db.collection('events').findOneAndUpdate(
-      { _id: new ObjectId(eventId) },
-      { $set: updates },
-      { returnDocument: 'after' }
+    const result = await db.collection('events').findOneAndUpdate(
+      { _id: new ObjectId(eventId), createdBy: userEmail },
+      {
+        $set: {
+          title: updatedEvent.title,
+          date: updatedEvent.date,
+          description: updatedEvent.description,
+          photoURL: updatedEvent.photoURL || "",
+        },
+      },
+      {
+        returnDocument: 'after',
+      }
     );
 
-    if (!updatedEvent.value) {
-      return res.status(404).json({ message: 'Event not found' });
+    if (!result.value) {
+      return res.status(403).send({
+        message: 'Not allowed to update this event or event not found',
+      });
     }
 
-    res.json(updatedEvent.value);
+    res.json(result.value);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Failed to update event' });
+    console.error('Error updating event:', error);
+    res.status(500).send({ message: 'Failed to update event' });
   }
 });
 

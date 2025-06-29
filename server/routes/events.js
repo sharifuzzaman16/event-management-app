@@ -79,8 +79,6 @@ router.delete('/:id', verifyJWT, async (req, res) => {
 });
 
 // Update an event by ID (only creator)
-const { ObjectId } = require("mongodb");
-
 router.put('/:id', verifyJWT, async (req, res) => {
   const db = getDb();
   const eventId = req.params.id;

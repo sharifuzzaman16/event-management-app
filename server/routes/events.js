@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { getDb } = require('../utils/mongoClient');
+const { getDb } = require('../db')
+
 // GET all events
 router.get('/', async (req, res) => {
   try {

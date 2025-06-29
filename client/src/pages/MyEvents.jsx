@@ -40,21 +40,13 @@ function MyEvents() {
     setModalOpen(true);
   };
 
-  const handleUpdate = (updatedEvent) => {
-    setEvents((prevEvents) =>
-      prevEvents.map((e) =>
-        e._id === updatedEvent._id
-          ? {
-              ...updatedEvent,
-              date: updatedEvent.date
-                ? new Date(updatedEvent.date).toISOString()
-                : "",
-            }
-          : e
-      )
-    );
-    setModalOpen(false);
-  };
+ const handleUpdate = (updatedEvent) => {
+  console.log('Updated event received:', updatedEvent);
+  setEvents(prevEvents =>
+    prevEvents.map(e => e._id === updatedEvent._id ? updatedEvent : e)
+  );
+  setModalOpen(false);
+};
 
   const handleDelete = async (eventId) => {
     if (!window.confirm("Are you sure you want to delete this event?")) return;

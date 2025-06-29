@@ -21,7 +21,7 @@ function Events() {
   const [error, setError] = useState("");
 
   const [search, setSearch] = useState("");
-  const [dateFilter, setDateFilter] = useState("all"); // new
+  const [dateFilter, setDateFilter] = useState("all"); 
 
   const userEmail = user?.email;
 
@@ -46,14 +46,12 @@ function Events() {
   useEffect(() => {
     let result = [...events];
 
-    // Filter by title
     if (search.trim()) {
       result = result.filter((e) =>
         e.title.toLowerCase().includes(search.toLowerCase())
       );
     }
 
-    // Filter by date range
     const today = new Date();
     let range = null;
 
@@ -121,7 +119,6 @@ function Events() {
 
   return (
     <div className="p-4">
-      {/* 🔍 Search and Filters */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
         <input
           type="text"
@@ -154,7 +151,6 @@ function Events() {
         </div>
       </div>
 
-      {/* 🧾 Event List */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filtered.length === 0 ? (
           <p className="text-center col-span-full">No events found.</p>

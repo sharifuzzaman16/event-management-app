@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
 
 export default function EditEventModal({ isOpen, onClose, event, onUpdate }) {
+  const { token } = useAuth();
   const [form, setForm] = useState({
     title: "",
     description: "",
     date: "",
     photoURL: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (event) {
+    if (event && isOpen) {
       setForm({
         title: event.title || "",
         description: event.description || "",
@@ -17,14 +20,21 @@ export default function EditEventModal({ isOpen, onClose, event, onUpdate }) {
         photoURL: event.photoURL || "",
       });
     }
-  }, [event]);
+  }, [event, isOpen]);
 
   const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setForm(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
     try {
       const res = await fetch(
@@ -33,21 +43,49 @@ export default function EditEventModal({ isOpen, onClose, event, onUpdate }) {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Authorization": `Bearer ${token}`,
           },
           body: JSON.stringify(form),
         }
       );
 
-      if (!res.ok) throw new Error("Failed to update event");
+      const data = await res.json();
 
-      const updatedEvent = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || `Server error: ${res.status}`);
+      }
 
-      onUpdate(updatedEvent);
+      if (!data.success) {
+        throw new Error(data.message || "Update failed");
+      }
+
+      onUpdate(data.event);
       onClose();
+      
+
+      setForm({
+        title: "",
+        description: "",
+        date: "",
+        photoURL: "",
+      });
+
     } catch (err) {
-      alert(err.message);
+      console.error('Update error:', err);
+      alert(`Update failed: ${err.message}`);
+    } finally {
+      setIsSubmitting(false);
     }
+  };
+
+  const handleClose = () => {
+    setForm({
+      title: "",
+      description: "",
+      date: "",
+      photoURL: "",
+    });
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -57,51 +95,65 @@ export default function EditEventModal({ isOpen, onClose, event, onUpdate }) {
       <div className="bg-white p-6 rounded w-full max-w-md">
         <h2 className="text-xl font-bold mb-4">Edit Event</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            name="title"
-            placeholder="Title"
-            className="w-full border px-3 py-2 rounded"
-            value={form.title}
-            onChange={handleChange}
-            required
-          />
-          <textarea
-            name="description"
-            placeholder="Description"
-            className="w-full border px-3 py-2 rounded"
-            value={form.description}
-            onChange={handleChange}
-            rows={4}
-            required
-          />
-          <input
-            type="date"
-            name="date"
-            className="w-full border px-3 py-2 rounded"
-            value={form.date}
-            onChange={handleChange}
-            required
-          />
-          <input
-            name="photoURL"
-            placeholder="Photo URL"
-            className="w-full border px-3 py-2 rounded"
-            value={form.photoURL}
-            onChange={handleChange}
-          />
+          <div>
+            <input
+              name="title"
+              placeholder="Title"
+              className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={form.title}
+              onChange={handleChange}
+              required
+              disabled={isSubmitting}
+            />
+          </div>
+          <div>
+            <textarea
+              name="description"
+              placeholder="Description"
+              className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={form.description}
+              onChange={handleChange}
+              rows={4}
+              required
+              disabled={isSubmitting}
+            />
+          </div>
+          <div>
+            <input
+              type="date"
+              name="date"
+              className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={form.date}
+              onChange={handleChange}
+              required
+              disabled={isSubmitting}
+            />
+          </div>
+          <div>
+            <input
+              name="photoURL"
+              placeholder="Photo URL (optional)"
+              className="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={form.photoURL}
+              onChange={handleChange}
+              disabled={isSubmitting}
+            />
+          </div>
           <div className="flex justify-end gap-2">
             <button
               type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded border"
+              onClick={handleClose}
+              className="px-4 py-2 rounded border hover:bg-gray-50"
+              disabled={isSubmitting}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+              disabled={isSubmitting}
             >
-              Save
+              {isSubmitting ? "Saving..." : "Save"}
             </button>
           </div>
         </form>

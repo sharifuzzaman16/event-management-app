@@ -59,7 +59,7 @@ router.get('/', async (req, res) => {
 
   try {
     const events = await db.collection('events').find(query).toArray();
-    res.json(events);
+    res.status(200).json(events);
   } catch (error) {
     console.error('Error fetching events:', error);
     res.status(500).json({ message: 'Failed to fetch events' });
@@ -99,7 +99,7 @@ router.get('/my-events', verifyJWT, async (req, res) => {
     const myEvents = await db.collection('events')
       .find({ createdBy: email })
       .toArray();
-    res.json(myEvents);
+    res.status(200).json(myEvents);
   } catch (error) {
     console.error('Error fetching my events:', error);
     res.status(500).json({ message: 'Failed to get user events' });
@@ -118,8 +118,21 @@ router.put('/:id', verifyJWT, async (req, res) => {
   }
 
   try {
+    // Verify event exists and user is creator
+    const existingEvent = await db.collection('events').findOne({
+      _id: new ObjectId(eventId),
+      createdBy: userEmail
+    });
+
+    if (!existingEvent) {
+      return res.status(403).json({
+        message: 'Not authorized to update this event or event not found',
+      });
+    }
+
+    // Proceed with update
     const result = await db.collection('events').findOneAndUpdate(
-      { _id: new ObjectId(eventId), createdBy: userEmail },
+      { _id: new ObjectId(eventId) },
       {
         $set: {
           title: updatedEvent.title,
@@ -133,12 +146,10 @@ router.put('/:id', verifyJWT, async (req, res) => {
     );
 
     if (!result.value) {
-      return res.status(403).json({
-        message: 'Not allowed to update this event or event not found',
-      });
+      return res.status(500).json({ message: 'Failed to update event' });
     }
 
-    res.json(result.value);
+    res.status(200).json(result.value);
   } catch (error) {
     console.error('Error updating event:', error);
     res.status(500).json({ message: 'Failed to update event' });
@@ -158,10 +169,12 @@ router.delete('/:id', verifyJWT, async (req, res) => {
     });
 
     if (result.deletedCount === 0) {
-      return res.status(403).json({ message: 'Not allowed to delete this event or event not found' });
+      return res.status(403).json({ 
+        message: 'Not authorized to delete this event or event not found' 
+      });
     }
 
-    res.json({ message: 'Event deleted successfully' });
+    res.status(200).json({ message: 'Event deleted successfully' });
   } catch (error) {
     console.error('Error deleting event:', error);
     res.status(500).json({ message: 'Failed to delete event' });
@@ -191,7 +204,7 @@ router.patch('/join/:id', verifyJWT, async (req, res) => {
       { returnDocument: 'after' }
     );
 
-    res.json(result.value);
+    res.status(200).json(result.value);
   } catch (error) {
     console.error('Error joining event:', error);
     res.status(500).json({ message: 'Failed to join event' });
@@ -221,7 +234,7 @@ router.patch('/leave/:id', verifyJWT, async (req, res) => {
       { returnDocument: 'after' }
     );
 
-    res.json(result.value);
+    res.status(200).json(result.value);
   } catch (error) {
     console.error('Error leaving event:', error);
     res.status(500).json({ message: 'Failed to leave event' });

@@ -1,38 +1,23 @@
-import { Link } from "react-router-dom";
+function EventCard({ event, userEmail, onJoin }) {
+  const hasJoined = event.joined?.includes(userEmail);
 
-function EventCard({ event, onJoin, isOwner, onEdit, onDelete }) {
   return (
-    <div className="bg-white rounded-xl p-4 shadow-md">
-      <h2 className="text-xl font-semibold">{event.title}</h2>
-      <p className="text-gray-600">{event.description}</p>
-      <p className="text-sm text-gray-500">📅 {event.date}</p>
+    <div className="bg-white p-4 rounded shadow space-y-2">
+      <h3 className="text-xl font-semibold">{event.title}</h3>
+      <p className="text-sm text-gray-600">{event.description}</p>
+      <p className="text-sm">Date: {new Date(event.date).toLocaleDateString()}</p>
 
-      <div className="mt-3 flex flex-wrap gap-2">
-        {!isOwner && (
-          <button
-            onClick={() => onJoin(event._id)}
-            className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
-          >
-            Join
-          </button>
-        )}
-        {isOwner && (
-          <>
-            <button
-              onClick={() => onEdit(event)}
-              className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => onDelete(event._id)}
-              className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-            >
-              Delete
-            </button>
-          </>
-        )}
-      </div>
+      <button
+        onClick={onJoin}
+        disabled={hasJoined}
+        className={`px-4 py-1 rounded text-white ${
+          hasJoined
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-blue-600 hover:bg-blue-700"
+        }`}
+      >
+        {hasJoined ? "Joined" : "Join"}
+      </button>
     </div>
   );
 }

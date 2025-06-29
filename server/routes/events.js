@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { getDb } = require('../db')
+const verifyJWT = require('../middleware/verifyJWT');
 
 // GET all events
 router.get('/', async (req, res) => {
@@ -13,6 +14,28 @@ router.get('/', async (req, res) => {
     res.status(500).send({ message: 'Failed to fetch events' });
   }
 });
+
+// Create a new event
+router.post('/', verifyJWT, async (req, res) => {
+  const db = getDb();
+  const event = req.body;
+
+  if (!event.title || !event.date || !event.description) {
+    return res.status(400).send({ message: 'Missing required fields' });
+  }
+
+  event.createdBy = req.user.email;
+  event.joined = [];
+
+  try {
+    const result = await db.collection('events').insertOne(event);
+    res.send(result);
+  } catch (error) {
+    console.error('Failed to create event:', error);
+    res.status(500).send({ message: 'Server error' });
+  }
+});
+
 
 
 module.exports = router;

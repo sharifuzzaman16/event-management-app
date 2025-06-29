@@ -78,5 +78,34 @@ router.delete('/:id', verifyJWT, async (req, res) => {
   }
 });
 
+// Update an event by ID (only creator)
+router.put('/:id', verifyJWT, async (req, res) => {
+  const db = getDb();
+  const eventId = req.params.id;
+  const userEmail = req.user.email;
+  const updatedEvent = req.body;
+
+  if (!updatedEvent.title || !updatedEvent.date || !updatedEvent.description) {
+    return res.status(400).send({ message: 'Missing required fields' });
+  }
+
+  try {
+    const result = await db.collection('events').updateOne(
+      { _id: new ObjectId(eventId), createdBy: userEmail },
+      { $set: { title: updatedEvent.title, date: updatedEvent.date, description: updatedEvent.description } }
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(403).send({ message: 'Not allowed to update this event or event not found' });
+    }
+
+    res.send({ message: 'Event updated successfully' });
+  } catch (error) {
+    console.error('Error updating event:', error);
+    res.status(500).send({ message: 'Failed to update event' });
+  }
+});
+
+
 
 module.exports = router;

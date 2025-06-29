@@ -1,8 +1,1 @@
-POST http://localhost:5000/api/events
-Content-Type: application/json
-
-{
-  "title": "Event Without JWT",
-  "date": "2025-07-02",
-  "description": "This works without a token"
-}
+GET http://localhost:5000/api/events

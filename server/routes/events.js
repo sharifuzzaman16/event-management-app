@@ -36,6 +36,24 @@ router.post('/', verifyJWT, async (req, res) => {
   }
 });
 
+// Get events created by the logged-in user
+router.get('/my-events', verifyJWT, async (req, res) => {
+  const db = getDb();
+  const email = req.user.email;
+
+  try {
+    const myEvents = await db.collection('events')
+      .find({ createdBy: email })
+      .toArray();
+
+    res.send(myEvents);
+  } catch (error) {
+    console.error('Error fetching my events:', error);
+    res.status(500).send({ message: 'Failed to get user events' });
+  }
+});
+
+
 
 
 module.exports = router;

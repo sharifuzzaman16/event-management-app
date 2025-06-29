@@ -1,9 +1,1 @@
-POST http://localhost:5000/api/auth/register
-Content-Type: application/json
-
-{
-  "name": "Eusuf",
-  "email": "eusuf@example.com",
-  "password": "password123",
-  "photoURL": "https://example.com/photo.jpg"
-}
+GET http://localhost:5000/api/events

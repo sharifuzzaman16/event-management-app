@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { getDb } = require('../db')
 const verifyJWT = require('../middleware/verifyJWT');
+const { ObjectId } = require('mongodb');
 
 // GET all events
 router.get('/', async (req, res) => {
@@ -54,6 +55,28 @@ router.get('/my-events', verifyJWT, async (req, res) => {
 });
 
 
+// Delete an event (only if user is creator)
+router.delete('/:id', verifyJWT, async (req, res) => {
+  const db = getDb();
+  const eventId = req.params.id;
+  const userEmail = req.user.email;
+
+  try {
+    const result = await db.collection('events').deleteOne({
+      _id: new ObjectId(eventId),
+      createdBy: userEmail
+    });
+
+    if (result.deletedCount === 0) {
+      return res.status(403).send({ message: 'Not allowed to delete this event or event not found' });
+    }
+
+    res.send({ message: 'Event deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting event:', error);
+    res.status(500).send({ message: 'Failed to delete event' });
+  }
+});
 
 
 module.exports = router;

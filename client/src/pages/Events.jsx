@@ -1,11 +1,13 @@
-import React from 'react'
+import EventCard from "../components/EventCard";
 
-function Events() {
+const Events = () => {
+  const events = [];
+
   return (
-    <div>
-      this is the Events page
+    <div className="space-y-4">
+      {events.map((event) => (
+        <EventCard key={event._id} event={event} onJoin={handleJoin} />
+      ))}
     </div>
-  )
-}
-
-export default Events
+  );
+};

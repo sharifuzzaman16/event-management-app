@@ -12,6 +12,7 @@ import AddEvents from './pages/AddEvents.jsx';
 import MyEvents from './pages/MyEvents.jsx';
 
 import './index.css';
+import PrivateRoute from './routes/PrivateRoute.jsx';
 
 const router = createBrowserRouter([
   {
@@ -22,8 +23,8 @@ const router = createBrowserRouter([
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
       { path: 'events', element: <Events /> },
-      { path: 'add-events', element: <AddEvents /> },
-      { path: 'my-events', element: <MyEvents /> },
+      { path: 'add-events', element: <PrivateRoute><AddEvents /></PrivateRoute> },
+      { path: 'my-events', element: <PrivateRoute><MyEvents /></PrivateRoute> },
     ],
   },
 ]);

@@ -107,5 +107,36 @@ router.put('/:id', verifyJWT, async (req, res) => {
 });
 
 
+// Join an event (only once per user)
+router.patch('/join/:id', verifyJWT, async (req, res) => {
+  const db = getDb();
+  const eventId = req.params.id;
+  const userEmail = req.user.email;
+
+  try {
+    const event = await db.collection('events').findOne({ _id: new ObjectId(eventId) });
+
+    if (!event) {
+      return res.status(404).send({ message: 'Event not found' });
+    }
+
+    if (event.joined.includes(userEmail)) {
+      return res.status(400).send({ message: 'You have already joined this event' });
+    }
+
+    const result = await db.collection('events').updateOne(
+      { _id: new ObjectId(eventId) },
+      { $push: { joined: userEmail } }
+    );
+
+    res.send({ message: 'Successfully joined the event' });
+  } catch (error) {
+    console.error('Error joining event:', error);
+    res.status(500).send({ message: 'Failed to join event' });
+  }
+});
+
+
+
 
 module.exports = router;

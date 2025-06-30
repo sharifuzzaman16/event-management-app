@@ -75,10 +75,12 @@ router.post("/", verifyJWT, async (req, res) => {
     time,
     location,
     description,
+    imageUrl,
     creator,
   } = req.body;
 
-  if (!title || !date || !time || !location || !description || !creator) {
+
+  if (!title || !date || !time || !location || !description || !imageUrl || !creator) {
     return res.status(400).json({ message: "Missing required fields" });
   }
 
@@ -88,6 +90,7 @@ router.post("/", verifyJWT, async (req, res) => {
     time,
     location,
     description,
+    imageUrl,
     creator,
     createdBy: req.user.email,
     joined: [],
@@ -100,12 +103,14 @@ router.post("/", verifyJWT, async (req, res) => {
     const createdEvent = await db
       .collection("events")
       .findOne({ _id: result.insertedId });
+
     res.status(201).json(createdEvent);
   } catch (error) {
     console.error("Failed to create event:", error);
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 
 // Get events created by the logged-in user

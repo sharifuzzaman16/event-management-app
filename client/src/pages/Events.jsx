@@ -12,8 +12,7 @@ import {
   subMonths,
   isWithinInterval,
 } from "date-fns";
-import { Link } from "react-router-dom";
-import { Calendar, Users, MapPin, Plus, Search } from "lucide-react";
+import { Search } from "lucide-react";
 
 function Events() {
   const { token, user } = useAuth();

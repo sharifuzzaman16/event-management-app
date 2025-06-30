@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Calendar, User, LogOut } from "lucide-react";
-import { use, useState } from "react";
+import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
@@ -23,13 +23,8 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo and Brand */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-2 rounded-lg">
-              <Calendar className="h-6 w-6 text-white" />
-            </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              EventSphere
-            </span>
+          <Link to="/" className="w-44 flex items-center">
+            <img className="w-full h-full" src="./public/Gatherly.png" alt="Gatherly Logo" />
           </Link>
 
           {/* Navigation Links */}
@@ -58,14 +53,14 @@ const Navbar = () => {
                   className="flex items-center space-x-2 bg-gray-100 rounded-full p-1 hover:bg-gray-200 transition-colors duration-200"
                 >
                   <img
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face"
+                    src={user.photoURL || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLk_pj2Eee_Y8rJhgGrfusEV5owncPIKNEqg&s"}
                     alt="Profile"
                     className="w-12 h-12 rounded-full"
                   />
                 </button>
 
                 {showUserMenu && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                  <div className="absolute right-0 mt-4 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
                     <div className="px-4 py-2 border-b border-gray-100">
                       <p className="text-sm font-medium text-gray-900">{user.name}</p>
                       <p className="text-sm text-gray-500">{user.email}</p>

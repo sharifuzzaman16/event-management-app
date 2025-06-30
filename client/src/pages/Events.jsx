@@ -85,20 +85,20 @@ function Events() {
       );
     }
 
-    // Sort events by date and time in descending order (most recent first)
+
     result.sort((a, b) => {
       const dateA = new Date(a.date);
       const dateB = new Date(b.date);
       
-      // If events have time property, combine date and time for accurate sorting
+
       if (a.time && b.time) {
         const datetimeA = new Date(`${a.date}T${a.time}`);
         const datetimeB = new Date(`${b.date}T${b.time}`);
-        return datetimeB - datetimeA; // Descending order
+        return datetimeB - datetimeA;
       }
       
-      // If no time property, sort by date only
-      return dateB - dateA; // Descending order
+
+      return dateB - dateA; 
     });
 
     setFiltered(result);

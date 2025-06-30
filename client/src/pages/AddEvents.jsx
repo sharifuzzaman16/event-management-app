@@ -3,7 +3,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Calendar, MapPin, Clock, FileText } from "lucide-react";
+import { Calendar, MapPin, Clock, FileText, Image } from "lucide-react";
 
 function AddEvents() {
   const { token, user } = useAuth();
@@ -15,6 +15,7 @@ function AddEvents() {
     time: "",
     location: "",
     description: "",
+    imageUrl: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -37,6 +38,7 @@ function AddEvents() {
     if (!formData.time) newErrors.time = "Event time is required";
     if (!formData.location.trim()) newErrors.location = "Event location is required";
     if (!formData.description.trim()) newErrors.description = "Event description is required";
+    if (!formData.imageUrl.trim()) newErrors.imageUrl = "Image URL is required";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -62,7 +64,6 @@ function AddEvents() {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
 
       await Swal.fire({
         icon: "success",
@@ -181,6 +182,28 @@ function AddEvents() {
               {errors.location && <p className="mt-1 text-sm text-red-600">{errors.location}</p>}
             </div>
 
+            {/* Image URL */}
+            <div>
+              <label htmlFor="imageUrl" className="block text-sm font-medium text-gray-700 mb-2">
+                Image URL *
+              </label>
+              <div className="relative">
+                <Image className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <input
+                  type="url"
+                  id="imageUrl"
+                  name="imageUrl"
+                  value={formData.imageUrl}
+                  onChange={handleInputChange}
+                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
+                    errors.imageUrl ? "border-red-500" : "border-gray-300"
+                  }`}
+                  placeholder="Enter image URL"
+                />
+              </div>
+              {errors.imageUrl && <p className="mt-1 text-sm text-red-600">{errors.imageUrl}</p>}
+            </div>
+
             {/* Description */}
             <div>
               <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
@@ -204,7 +227,7 @@ function AddEvents() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg"
+              className="btn btn-primary btn-block"
             >
               {loading ? "Adding..." : "Create Event"}
             </button>

@@ -39,7 +39,7 @@ const Home = () => {
       {/* Features Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Choose EventSphere?</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Choose Gatherly?</h2>
           <p className="text-lg text-gray-600">Everything you need to discover and create amazing events</p>
         </div>
 

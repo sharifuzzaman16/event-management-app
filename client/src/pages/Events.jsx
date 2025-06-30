@@ -12,6 +12,8 @@ import {
   subMonths,
   isWithinInterval,
 } from "date-fns";
+import { Link } from "react-router-dom";
+import { Calendar, Users, MapPin, Plus } from "lucide-react";
 
 function Events() {
   const { token, user } = useAuth();
@@ -21,7 +23,7 @@ function Events() {
   const [error, setError] = useState("");
 
   const [search, setSearch] = useState("");
-  const [dateFilter, setDateFilter] = useState("all"); 
+  const [dateFilter, setDateFilter] = useState("all");
 
   const userEmail = user?.email;
 
@@ -85,20 +87,15 @@ function Events() {
       );
     }
 
-
     result.sort((a, b) => {
       const dateA = new Date(a.date);
       const dateB = new Date(b.date);
-      
-
       if (a.time && b.time) {
         const datetimeA = new Date(`${a.date}T${a.time}`);
         const datetimeB = new Date(`${b.date}T${b.time}`);
         return datetimeB - datetimeA;
       }
-      
-
-      return dateB - dateA; 
+      return dateB - dateA;
     });
 
     setFiltered(result);
@@ -134,52 +131,63 @@ function Events() {
   if (error) return <p className="text-red-500 text-center">{error}</p>;
 
   return (
-    <div className="p-4">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
-        <input
-          type="text"
-          placeholder="Search by title"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="px-4 py-2 border rounded w-full md:w-1/3"
-        />
-
-        <div className="flex flex-wrap gap-2">
-          {[
-            { label: "All", value: "all" },
-            { label: "Current Week", value: "current-week" },
-            { label: "Last Week", value: "last-week" },
-            { label: "Current Month", value: "current-month" },
-            { label: "Last Month", value: "last-month" },
-          ].map((btn) => (
-            <button
-              key={btn.value}
-              onClick={() => setDateFilter(btn.value)}
-              className={`px-3 py-1 rounded border ${
-                dateFilter === btn.value
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 hover:bg-gray-200"
-              }`}
-            >
-              {btn.label}
-            </button>
-          ))}
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-15 pb-8">
+        <div className="text-center mb-16">
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-4">
+            Browse <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Events</span>
+          </h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Search, filter, and join events that match your interest.
+          </p>
         </div>
-      </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filtered.length === 0 ? (
-          <p className="text-center col-span-full">No events found.</p>
-        ) : (
-          filtered.map((event) => (
-            <EventCard
-              key={event._id}
-              event={event}
-              userEmail={userEmail}
-              onJoin={() => handleJoin(event._id)}
-            />
-          ))
-        )}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+          <input
+            type="text"
+            placeholder="Search by title"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="px-4 py-2 border rounded w-full md:w-1/3"
+          />
+
+          <div className="flex flex-wrap gap-2">
+            {[
+              { label: "All", value: "all" },
+              { label: "Current Week", value: "current-week" },
+              { label: "Last Week", value: "last-week" },
+              { label: "Current Month", value: "current-month" },
+              { label: "Last Month", value: "last-month" },
+            ].map((btn) => (
+              <button
+                key={btn.value}
+                onClick={() => setDateFilter(btn.value)}
+                className={`px-3 py-1 rounded border text-sm font-medium transition-all duration-200 ${
+                  dateFilter === btn.value
+                    ? "bg-blue-600 text-white shadow"
+                  : "bg-white hover:bg-gray-100"
+                }`}
+              >
+                {btn.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filtered.length === 0 ? (
+            <p className="text-center col-span-full">No events found.</p>
+          ) : (
+            filtered.map((event) => (
+              <EventCard
+                key={event._id}
+                event={event}
+                userEmail={userEmail}
+                onJoin={() => handleJoin(event._id)}
+              />
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

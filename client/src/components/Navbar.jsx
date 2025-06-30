@@ -1,109 +1,118 @@
-import { useContext } from "react";
-import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext.jsx";
+import { Link, useLocation } from "react-router-dom";
+import { Calendar, User, LogOut } from "lucide-react";
+import { use, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
-export default function Navbar() {
-    const { user, logout } = useAuth();
+const Navbar = () => {
+  const location = useLocation();
+  const [showUserMenu, setShowUserMenu] = useState(false);
+
+  const isActive = (path) => location.pathname === path;
+
+  const {user, logout} = useAuth()
+
+  const navLinks = [
+    { name: "Home", path: "/" },
+    { name: "Events", path: "/events" },
+    { name: "Add Event", path: "/add-events" },
+    { name: "My Events", path: "/my-events" },
+  ];
 
   return (
-    <div className="navbar bg-base-100 shadow-sm">
-      <div className="navbar-start">
-        <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              {" "}
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16"
-              />{" "}
-            </svg>
-          </div>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
-          >
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/events">Events</Link>
-            </li>
-            <li>
-              <Link to="/add-events">Add Events</Link>
-            </li>
-            <li>
-              <Link to="/my-events">My Events</Link>
-            </li>
-          </ul>
-        </div>
-        <a className="btn btn-ghost text-xl">daisyUI</a>
-      </div>
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/events">Events</Link>
-          </li>
-          <li>
-            <Link to="/add-events">Add Events</Link>
-          </li>
-          <li>
-            <Link to="/my-events">My Events</Link>
-          </li>
-        </ul>
-      </div>
-      <div className="navbar-end">
-        {user ? (
-          <>
-            {" "}
-            <div className="dropdown dropdown-end">
-              <div
-                tabIndex={0}
-                role="button"
-                className="btn btn-ghost btn-circle avatar"
-              >
-                <div className="w-10 rounded-full">
-                  <img
-                    alt="Tailwind CSS Navbar component"
-                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                  />
-                </div>
-              </div>
-              <ul
-                tabIndex={0}
-                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
-              >
-                <li>
-                  <a className="justify-between">
-                    Profile
-                    <span className="badge">New</span>
-                  </a>
-                </li>
-                <li>
-                  <a>Settings</a>
-                </li>
-                <li>
-                  <a onClick={logout}>Logout</a>
-                </li>
-              </ul>
+    <nav className="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          {/* Logo and Brand */}
+          <Link to="/" className="flex items-center space-x-2">
+            <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-2 rounded-lg">
+              <Calendar className="h-6 w-6 text-white" />
             </div>
-          </>
-        ) : (
-          <>
-            <a className="btn">Button</a>
-          </>
-        )}
+            <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              EventSphere
+            </span>
+          </Link>
+
+          {/* Navigation Links */}
+          <div className="hidden md:flex items-center space-x-8">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                to={link.path}
+                className={`font-medium transition-colors duration-200 ${
+                  isActive(link.path)
+                    ? "text-purple-600 border-b-2 border-purple-600 pb-1"
+                    : "text-gray-700 hover:text-purple-600"
+                }`}
+              >
+                {link.name}
+              </Link>
+            ))}
+          </div>
+
+          {/* User Section */}
+          <div className="flex items-center space-x-4">
+            {user ? (
+              <div className="relative">
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="flex items-center space-x-2 bg-gray-100 rounded-full p-2 hover:bg-gray-200 transition-colors duration-200"
+                >
+                  <img
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face"
+                    alt="Profile"
+                    className="w-8 h-8 rounded-full"
+                  />
+                </button>
+
+                {showUserMenu && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                    <div className="px-4 py-2 border-b border-gray-100">
+                      <p className="text-sm font-medium text-gray-900">John Doe</p>
+                      <p className="text-sm text-gray-500">john@example.com</p>
+                    </div>
+                    <button
+                      onClick={logout}
+                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-full font-medium hover:from-purple-700 hover:to-blue-700 transition-all duration-200"
+              >
+                <User className="h-4 w-4" />
+                <span>Sign In</span>
+              </Link>
+            )}
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        <div className="md:hidden border-t border-gray-200 py-3">
+          <div className="flex justify-center flex-wrap gap-4">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                to={link.path}
+                className={`text-sm font-medium ${
+                  isActive(link.path)
+                    ? "text-purple-600"
+                    : "text-gray-700 hover:text-purple-600"
+                }`}
+              >
+                {link.name}
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+    </nav>
   );
-}
+};
+
+export default Navbar;

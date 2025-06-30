@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useAuth } from "../context/AuthContext";
@@ -51,8 +51,8 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 px-4">
-      <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-indigo-50 px-4">
+      <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
         <h2 className="text-3xl font-bold text-center text-indigo-600 mb-2">Welcome Back</h2>
         <p className="text-center text-gray-500 mb-6">Please sign in to your account</p>
 
@@ -61,7 +61,7 @@ function Login() {
             type="email"
             name="email"
             placeholder="Email"
-            className="w-full px-4 py-2 border rounded-lg"
+            className="w-full px-4 py-3 border rounded-lg"
             value={form.email}
             onChange={handleChange}
             required
@@ -70,7 +70,7 @@ function Login() {
             type="password"
             name="password"
             placeholder="Password"
-            className="w-full px-4 py-2 border rounded-lg"
+            className="w-full px-4 py-3 border rounded-lg"
             value={form.password}
             onChange={handleChange}
             required
@@ -78,11 +78,17 @@ function Login() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700"
+            className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700"
           >
             {submitting ? "Logging in..." : "Login"}
           </button>
         </form>
+        <p className="text-center text-gray-500 mt-4">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-indigo-600 hover:underline">
+            Sign Up
+          </Link>
+        </p>
       </div>
     </div>
   );

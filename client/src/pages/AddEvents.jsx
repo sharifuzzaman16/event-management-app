@@ -86,7 +86,7 @@ function AddEvents() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-indigo-50">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Create New Event</h1>
@@ -108,7 +108,7 @@ function AddEvents() {
                   name="title"
                   value={formData.title}
                   onChange={handleInputChange}
-                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
+                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${
                     errors.title ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="Enter event title"
@@ -131,7 +131,7 @@ function AddEvents() {
                     name="date"
                     value={formData.date}
                     onChange={handleInputChange}
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
+                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${
                       errors.date ? "border-red-500" : "border-gray-300"
                     }`}
                   />
@@ -151,7 +151,7 @@ function AddEvents() {
                     name="time"
                     value={formData.time}
                     onChange={handleInputChange}
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
+                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${
                       errors.time ? "border-red-500" : "border-gray-300"
                     }`}
                   />
@@ -173,7 +173,7 @@ function AddEvents() {
                   name="location"
                   value={formData.location}
                   onChange={handleInputChange}
-                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
+                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${
                     errors.location ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="Enter event location"
@@ -195,7 +195,7 @@ function AddEvents() {
                   name="imageUrl"
                   value={formData.imageUrl}
                   onChange={handleInputChange}
-                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent ${
+                  className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${
                     errors.imageUrl ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="Enter image URL"
@@ -215,7 +215,7 @@ function AddEvents() {
                 rows={4}
                 value={formData.description}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none ${
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none ${
                   errors.description ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder="Describe your event..."

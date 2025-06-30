@@ -22,7 +22,7 @@ const router = createBrowserRouter([
       { path: '', element: <Home /> },
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
-      { path: 'events', element: <Events /> },
+      { path: 'events', element: <PrivateRoute><Events /></PrivateRoute>},
       { path: 'add-events', element: <PrivateRoute><AddEvents /></PrivateRoute> },
       { path: 'my-events', element: <PrivateRoute><MyEvents /></PrivateRoute> },
     ],

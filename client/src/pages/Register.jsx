@@ -63,8 +63,8 @@ function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 px-4">
-      <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-indigo-50 px-4">
+      <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
         <h2 className="text-3xl font-bold text-center text-indigo-600 mb-2">
           Create an Account
         </h2>
@@ -81,7 +81,7 @@ function Register() {
               type="text"
               name="name"
               placeholder="John Doe"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
               value={form.name}
               onChange={handleChange}
               required
@@ -96,7 +96,7 @@ function Register() {
               type="email"
               name="email"
               placeholder="email@example.com"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
               value={form.email}
               onChange={handleChange}
               required
@@ -111,7 +111,7 @@ function Register() {
               type="password"
               name="password"
               placeholder="••••••••"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
               value={form.password}
               onChange={handleChange}
               required
@@ -120,13 +120,13 @@ function Register() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Photo URL (optional)
+              Photo URL
             </label>
             <input
               type="text"
               name="photoURL"
               placeholder="https://example.com/photo.jpg"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
               value={form.photoURL}
               onChange={handleChange}
             />
@@ -135,20 +135,20 @@ function Register() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition-all duration-200 font-medium"
+            className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-all duration-200 font-medium"
           >
             {submitting ? "Registering..." : "Register"}
           </button>
         </form>
 
-        <p className="text-sm text-center text-gray-500 mt-6">
+        <p className="text-center text-gray-500 mt-4">
           Already have an account?{" "}
-          <span
-            className="text-indigo-600 cursor-pointer hover:underline"
-            onClick={() => navigate("/login")}
+          <a
+            href="/login"
+            className="text-indigo-600 hover:underline"
           >
-            Login
-          </span>
+            Sign In
+          </a>
         </p>
       </div>
     </div>

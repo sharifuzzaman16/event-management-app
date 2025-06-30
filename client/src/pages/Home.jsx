@@ -3,15 +3,15 @@ import { Calendar, Plus, Users } from "lucide-react";
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-indigo-50">
       {/* Hero Section */}
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-blue-600/10"></div>
+        <div className="absolute inset-0 bg-indigo-100"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-24">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
               Connect Through{" "}
-              <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              <span className="bg-[#3b25c1] bg-clip-text text-transparent">
                 Events
               </span>
             </h1>
@@ -21,13 +21,13 @@ const Home = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 to="/events"
-                className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-3 rounded-full font-semibold hover:from-purple-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg"
+                className="btn btn-primary text-white px-8 py-6 rounded-full font-semibold transform hover:scale-105 transition-all duration-200 shadow-lg"
               >
                 Browse Events
               </Link>
               <Link
                 to="/add-events"
-                className="bg-white text-purple-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-50 transform hover:scale-105 transition-all duration-200 shadow-lg border border-purple-200"
+                className="bg-white text-[#3b25c1] px-8 py-3 rounded-full font-semibold hover:bg-gray-50 transform hover:scale-105 transition-all duration-200 shadow-lg border border-indigo-200"
               >
                 Create Event
               </Link>
@@ -45,7 +45,7 @@ const Home = () => {
 
         <div className="grid md:grid-cols-3 gap-8">
           <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
-            <div className="bg-gradient-to-r from-purple-600 to-blue-600 w-12 h-12 rounded-xl flex items-center justify-center mb-6">
+            <div className="bg-[#3b25c1] w-12 h-12 rounded-xl flex items-center justify-center mb-6">
               <Calendar className="h-6 w-6 text-white" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-4">Easy Event Discovery</h3>
@@ -53,7 +53,7 @@ const Home = () => {
           </div>
 
           <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
-            <div className="bg-gradient-to-r from-purple-600 to-blue-600 w-12 h-12 rounded-xl flex items-center justify-center mb-6">
+            <div className="bg-[#3b25c1] w-12 h-12 rounded-xl flex items-center justify-center mb-6">
               <Plus className="h-6 w-6 text-white" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-4">Create & Manage</h3>
@@ -61,7 +61,7 @@ const Home = () => {
           </div>
 
           <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
-            <div className="bg-gradient-to-r from-purple-600 to-blue-600 w-12 h-12 rounded-xl flex items-center justify-center mb-6">
+            <div className="bg-[#3b25c1] w-12 h-12 rounded-xl flex items-center justify-center mb-6">
               <Users className="h-6 w-6 text-white" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-4">Build Community</h3>
@@ -71,13 +71,13 @@ const Home = () => {
       </div>
 
       {/* CTA Section */}
-      <div className="bg-gradient-to-r from-purple-600 to-blue-600 py-16">
+      <div className="bg-[#3b25c1] py-16">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-white mb-4">Ready to Get Started?</h2>
-          <p className="text-xl text-purple-100 mb-8">Join thousands of event enthusiasts already using EventSphere</p>
+          <p className="text-xl text-indigo-100 mb-8">Join thousands of event enthusiasts already using EventSphere</p>
           <Link
             to="/register"
-            className="bg-white text-purple-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transform hover:scale-105 transition-all duration-200 shadow-lg"
+            className="bg-white text-[#3b25c1] px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transform hover:scale-105 transition-all duration-200 shadow-lg"
           >
             Sign Up Today
           </Link>

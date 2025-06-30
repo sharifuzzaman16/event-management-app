@@ -3,6 +3,7 @@ import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import EventCard from "../components/EventCard";
 import Loader from "../components/Loader";
+import Swal from "sweetalert2";
 import {
   startOfWeek,
   endOfWeek,
@@ -109,36 +110,47 @@ function Events() {
   }, [search, dateFilter, events]);
 
   const handleJoin = async (eventId) => {
-    try {
-      const res = await axios.patch(
-        `https://event-management-app-production-f733.up.railway.app/api/events/join/${eventId}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+  try {
+    const res = await axios.patch(
+      `https://event-management-app-production-f733.up.railway.app/api/events/join/${eventId}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-      setEvents((prevEvents) =>
-        prevEvents.map((event) =>
-          event._id === eventId
-            ? { ...event, joined: [...(event.joined || []), userEmail] }
-            : event
-        )
-      );
+    setEvents((prevEvents) =>
+      prevEvents.map((event) =>
+        event._id === eventId
+          ? { ...event, joined: [...(event.joined || []), userEmail] }
+          : event
+      )
+    );
 
-      alert(res.data.message || "Joined successfully!");
-    } catch (err) {
-      alert(err.response?.data?.message || "Failed to join event.");
-    }
-  };
+    Swal.fire({
+      icon: "success",
+      title: "Joined!",
+      text: res.data.message || "You have joined the event successfully!",
+      confirmButtonColor: "#3B25C1",
+    });
+  } catch (err) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: err.response?.data?.message || "Failed to join the event.",
+      confirmButtonColor: "#d33",
+    });
+  }
+};
+
 
   if (loading) return <Loader />;
   if (error) return <p className="text-red-500 text-center">{error}</p>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-indigo-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-15 pb-8">
         <div className="text-center mb-16">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
@@ -159,7 +171,7 @@ function Events() {
             placeholder="Search events..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
           />
         </div>
 

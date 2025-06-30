@@ -13,7 +13,7 @@ import {
   isWithinInterval,
 } from "date-fns";
 import { Link } from "react-router-dom";
-import { Calendar, Users, MapPin, Plus } from "lucide-react";
+import { Calendar, Users, MapPin, Plus, Search } from "lucide-react";
 
 function Events() {
   const { token, user } = useAuth();
@@ -24,6 +24,14 @@ function Events() {
 
   const [search, setSearch] = useState("");
   const [dateFilter, setDateFilter] = useState("all");
+
+  const filters = [
+    { id: "all", label: "All" },
+    { id: "current-week", label: "Current Week" },
+    { id: "last-week", label: "Last Week" },
+    { id: "current-month", label: "Current Month" },
+    { id: "last-month", label: "Last Month" },
+  ];
 
   const userEmail = user?.email;
 
@@ -134,47 +142,48 @@ function Events() {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-15 pb-8">
         <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-4">
-            Browse <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Events</span>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Browse Events
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Search, filter, and join events that match your interest.
           </p>
         </div>
 
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+         <div className="bg-base-100 rounded-lg shadow-md p-6 mb-8">
+      <div className="flex flex-col md:flex-row gap-4 items-center">
+        {/* Search Bar */}
+        <div className="relative flex-1 w-full">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
           <input
             type="text"
-            placeholder="Search by title"
+            placeholder="Search events..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="px-4 py-2 border rounded w-full md:w-1/3"
+            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-full focus:ring-2 focus:ring-purple-500 focus:border-transparent"
           />
-
-          <div className="flex flex-wrap gap-2">
-            {[
-              { label: "All", value: "all" },
-              { label: "Current Week", value: "current-week" },
-              { label: "Last Week", value: "last-week" },
-              { label: "Current Month", value: "current-month" },
-              { label: "Last Month", value: "last-month" },
-            ].map((btn) => (
-              <button
-                key={btn.value}
-                onClick={() => setDateFilter(btn.value)}
-                className={`px-3 py-1 rounded border text-sm font-medium transition-all duration-200 ${
-                  dateFilter === btn.value
-                    ? "bg-blue-600 text-white shadow"
-                  : "bg-white hover:bg-gray-100"
-                }`}
-              >
-                {btn.label}
-              </button>
-            ))}
-          </div>
         </div>
 
-        <div className="grid md:grid-cols-2 justify-items-center lg:grid-cols-3 gap-8">
+        {/* Filter Buttons */}
+        <div className="flex justify-center flex-wrap gap-2">
+          {filters.map((filter) => (
+            <button
+              key={filter.id}
+              onClick={() => setDateFilter(filter.id)}
+              className={`px-4 py-2 rounded-full font-medium transition-all duration-200 ${
+                dateFilter === filter.id
+                  ? "bg-[#3B25C1] text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              {filter.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+
+        <div className="grid md:grid-cols-2 justify-items-center lg:grid-cols-3 gap-10">
           {filtered.length === 0 ? (
             <p className="text-center col-span-full">No events found.</p>
           ) : (

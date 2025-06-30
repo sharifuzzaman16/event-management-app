@@ -5,7 +5,7 @@ function EventCard({ event, userEmail, onJoin }) {
   const combinedDateTime = new Date(`${event.date}T${event.time}`);
 
   return (
-    <div className="card bg-base-100 w-96 shadow-sm">
+    <div className="card bg-base-100 w-94 shadow-sm">
       <figure>
         <img
           className="w-full h-56 object-cover rounded-t-lg"

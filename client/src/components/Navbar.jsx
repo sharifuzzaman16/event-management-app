@@ -21,7 +21,7 @@ const Navbar = () => {
   return (
     <nav className="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           {/* Logo and Brand */}
           <Link to="/" className="flex items-center space-x-2">
             <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-2 rounded-lg">
@@ -55,12 +55,12 @@ const Navbar = () => {
               <div className="relative">
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
-                  className="flex items-center space-x-2 bg-gray-100 rounded-full p-2 hover:bg-gray-200 transition-colors duration-200"
+                  className="flex items-center space-x-2 bg-gray-100 rounded-full p-1 hover:bg-gray-200 transition-colors duration-200"
                 >
                   <img
                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=32&h=32&fit=crop&crop=face"
                     alt="Profile"
-                    className="w-8 h-8 rounded-full"
+                    className="w-12 h-12 rounded-full"
                   />
                 </button>
 

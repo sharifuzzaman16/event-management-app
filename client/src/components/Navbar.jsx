@@ -24,7 +24,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-20">
           {/* Logo and Brand */}
           <Link to="/" className="w-44 flex items-center">
-            <img className="w-full h-full" src="/public/Gatherly.png" alt="Gatherly Logo" />
+            <img className="w-full h-full" src="/Gatherly.png" alt="Gatherly Logo" />
           </Link>
 
           {/* Navigation Links */}

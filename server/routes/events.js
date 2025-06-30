@@ -130,17 +130,21 @@ router.get("/my-events", verifyJWT, async (req, res) => {
   }
 });
 
-// Update an event by ID (only creator) - FINAL FIX
+
+
 router.put("/:id", verifyJWT, async (req, res) => {
   const db = getDb();
   const eventId = req.params.id;
   const userEmail = req.user.email;
   const updatedEvent = req.body;
 
-  if (!updatedEvent.title || !updatedEvent.date || !updatedEvent.description) {
+  const { title, date, time, location, description, imageUrl } = updatedEvent;
+
+
+  if (!title || !date || !time || !location || !description || !imageUrl) {
     return res.status(400).json({
       success: false,
-      message: "Title, date, and description are required",
+      message: "All fields (title, date, time, location, description, imageUrl) are required",
     });
   }
 
@@ -161,10 +165,12 @@ router.put("/:id", verifyJWT, async (req, res) => {
       { _id: new ObjectId(eventId) },
       {
         $set: {
-          title: updatedEvent.title,
-          date: updatedEvent.date,
-          description: updatedEvent.description,
-          photoURL: updatedEvent.photoURL || existingEvent.photoURL || "",
+          title,
+          date,
+          time,
+          location,
+          description,
+          imageUrl,
           updatedAt: new Date(),
         },
       }
@@ -194,6 +200,9 @@ router.put("/:id", verifyJWT, async (req, res) => {
     });
   }
 });
+
+module.exports = router;
+
 
 // Delete an event (only if user is creator)
 router.delete("/:id", verifyJWT, async (req, res) => {

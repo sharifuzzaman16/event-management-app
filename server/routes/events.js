@@ -69,16 +69,31 @@ router.get("/", async (req, res) => {
 // Create a new event
 router.post("/", verifyJWT, async (req, res) => {
   const db = getDb();
-  const event = req.body;
+  const {
+    title,
+    date,
+    time,
+    location,
+    description,
+    creator,
+  } = req.body;
 
-  if (!event.title || !event.date || !event.description) {
+  if (!title || !date || !time || !location || !description || !creator) {
     return res.status(400).json({ message: "Missing required fields" });
   }
 
-  event.createdBy = req.user.email;
-  event.joined = [];
-  event.createdAt = new Date();
-  event.updatedAt = new Date();
+  const event = {
+    title,
+    date,
+    time,
+    location,
+    description,
+    creator,
+    createdBy: req.user.email,
+    joined: [],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
 
   try {
     const result = await db.collection("events").insertOne(event);
@@ -91,6 +106,7 @@ router.post("/", verifyJWT, async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 // Get events created by the logged-in user
 router.get("/my-events", verifyJWT, async (req, res) => {

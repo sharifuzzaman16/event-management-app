@@ -18,7 +18,7 @@ function EventCard({ event, userEmail, onJoin }) {
         />
       </figure>
 
-      <div className="p-4 flex flex-col gap-3">
+      <div className="p-6 flex flex-col gap-3">
         <h2 className="text-xl font-semibold">{event.title}</h2>
         <p className="text-base text-gray-600">
           {event.description.length > 40

@@ -13,6 +13,7 @@ import {
   isWithinInterval,
 } from "date-fns";
 import { Book, CalendarCheck2, MapPin, Search, Users } from "lucide-react";
+import Swal from "sweetalert2";
 
 function MyEvents() {
   const { token, user } = useAuth();
@@ -119,23 +120,39 @@ function MyEvents() {
     setModalOpen(false);
   };
 
-  const handleDelete = async (eventId) => {
-    if (!window.confirm("Are you sure you want to delete this event?")) return;
+const handleDelete = async (eventId) => {
+  const result = await Swal.fire({
+    title: "Are you sure?",
+    text: "This event will be permanently deleted!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Yes, delete it!",
+  });
 
-    try {
-      await axios.delete(
-        `https://event-management-app-production-f733.up.railway.app/api/events/${eventId}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      setEvents((prev) => prev.filter((e) => e._id !== eventId));
-      alert("Event deleted successfully.");
-    } catch (err) {
-      alert("Failed to delete event.");
-      console.error(err);
-    }
-  };
+  if (!result.isConfirmed) return;
+
+  try {
+    await axios.delete(
+      `https://event-management-app-production-f733.up.railway.app/api/events/${eventId}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    // Remove from both states
+    setEvents((prev) => prev.filter((e) => e._id !== eventId));
+    setFiltered((prev) => prev.filter((e) => e._id !== eventId));
+
+    Swal.fire("Deleted!", "Your event has been deleted.", "success");
+  } catch (err) {
+    console.error(err);
+    Swal.fire("Error!", "Failed to delete the event.", "error");
+  }
+};
+
+
 
   if (loading) return <Loader />;
   if (error) return <p className="text-red-500 text-center mt-8">{error}</p>;

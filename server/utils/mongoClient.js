@@ -9,7 +9,7 @@ let cachedDb = null;
 async function connectToDatabase() {
   if (!cachedDb) {
     await client.connect();
-    console.log('Connected to MongoDB (auth)');
+    // console.log('Connected to MongoDB (auth)');
     cachedDb = client.db('eventManagementDB');
   }
 

@@ -9,7 +9,7 @@ async function connectToDb() {
   try {
     await client.connect();
     db = client.db('eventManagementDB');
-    console.log('Connected to MongoDB Atlas');
+    // console.log('Connected to MongoDB Atlas');
   } catch (err) {
     console.error('MongoDB connection failed:', err);
     process.exit(1);
